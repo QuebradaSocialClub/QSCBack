@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { conexaoMongoDB } from '@/middlewares/conexaoMongoDB';
 import { usuariosRequest } from '@/types/usuariosRequest';
 import { usuariosModel } from '@/models/usuariosModel';
+import md5 from 'md5';
 
 const endpointCadastro = async (req: NextApiRequest, res: NextApiResponse) => {
 
@@ -43,7 +44,7 @@ const endpointCadastro = async (req: NextApiRequest, res: NextApiResponse) => {
         const usuarioQueSeraSalvo = {
             nome: usuario.nome,
             email: usuario.email,
-            senha: usuario.senha,
+            senha: md5(usuario.senha),
             endereco: usuario.endereco,
             nascimento: usuario.nascimento,
             avatar: usuario.avatar,
