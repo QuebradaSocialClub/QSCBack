@@ -5,10 +5,13 @@ import { usuariosModel } from '@/models/usuariosModel';
 import md5 from 'md5';
 import nc from 'next-connect';
 
-const endpointCadastro = nc().post(async (req: NextApiRequest, res: NextApiResponse) => {
-    const usuario = req.body as usuariosRequest;
+const endpointUsuarios = nc()
+    .post(async (req: NextApiRequest, res: NextApiResponse) => {
+        const usuario = req.body as usuariosRequest;
 
-    if (!usuario) {
+        if (!usuario) {
+            return res.status(400).json({ msg: "Requisição inválida" });
+        }
 
         if (!usuario.nome || usuario.nome.length < 2) {
             return res.status(400).json({ erro: "Informe um nome válido!" });
@@ -53,11 +56,13 @@ const endpointCadastro = nc().post(async (req: NextApiRequest, res: NextApiRespo
         }
         await usuariosModel.create(usuarioQueSeraSalvo);
         return res.status(201).json({ msg: 'Usuário cadastrado com sucesso' });
-    }
-});
+
+    })
+    .get(async (req: NextApiRequest, res: NextApiResponse) => {
+        const usuarios = await usuariosModel.find();
+    
+        return res.status(200).json({ data: usuarios });
+      })
 
 
-
-return res.status(405).json({ erro: 'Método informado não é válido' });
-
-export default conexaoMongoDB(endpointCadastro);
+export default conexaoMongoDB(endpointUsuarios);
