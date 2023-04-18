@@ -60,9 +60,11 @@ const endpointUsuarios = nc()
     })
     .get(async (req: NextApiRequest, res: NextApiResponse) => {
         const usuarios = await usuariosModel.find();
-    
+
         return res.status(200).json({ data: usuarios });
-      })
+    })
+
+    
 
 
 export default conexaoMongoDB(endpointUsuarios);
