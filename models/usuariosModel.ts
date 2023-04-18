@@ -5,7 +5,7 @@ const usuariosSchema = new Schema ({
     senha: {type: String, required: true},
     nome: {type: String, required: true},
     endereco: {type: String, required: true},
-    nascimento: {type: Number, required: true},
+    nascimento: {type: Date, required: true},
     avatar: {type: String, required: false}, 
     celular: {type: Number, required: true}
 });
