@@ -6,8 +6,8 @@ const usuariosSchema = new Schema ({
     nome: {type: String, required: true},
     endereco: {type: String, required: true},
     nascimento: {type: Date, required: true},
-    avatar: {type: String, required: false}, 
-    celular: {type: Number, required: true}
+    celular: {type: Number, required: true},
+    avatar: {type: String, required: false}
 });
 
 export const usuariosModel = (mongoose.models.usuario || mongoose.model('usuario', usuariosSchema));
