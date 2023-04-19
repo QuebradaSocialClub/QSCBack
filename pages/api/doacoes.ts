@@ -37,9 +37,6 @@ const handler = nc()
                         " ou crú. Informe qual melhor horário e local para retirada da doação."
                 })
             }
-            if (!doacoes.idUsuarioDoador){
-                return res.status(400).json({ erro: "QUEM É???." });
-            }
 
             const doacao = {
                 idUsuarioDoador: usuario._id,
