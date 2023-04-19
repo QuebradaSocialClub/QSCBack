@@ -6,6 +6,8 @@ import md5 from 'md5';
 import nc from 'next-connect';
 import type { RespostaPadraoMsg } from '../../types/RespostaPadraoMsg'
 import { upload, uploadImagemCosmic } from "../../services/uploadImagemCosmic"
+import { Date } from 'mongoose';
+import { validacaoJWT } from '@/middlewares/validacaoJWT';
 
 const handler = nc()
     .use(upload.single('file'))
@@ -62,46 +64,54 @@ const handler = nc()
             return res.status(500).json({ erro: "Não foi possível criar essa conta: " + e.toString() });
         }
     })
-    .put(async(req : any, res : NextApiResponse<RespostaPadraoMsg>) => {
-        try{
-            const {userId} = req?.query;
+    .put(async (req: any, res: NextApiResponse<RespostaPadraoMsg>) => {
+        try {
+            const { userId } = req?.query;
             const usuario = await usuariosModel.findById(userId);
-            
-            if(!usuario){
-                return res.status(404).json({erro : 'Perfil de usuário não encontrado'});
+
+            if (!usuario) {
+                return res.status(404).json({ erro: 'Perfil de usuário não encontrado' });
             }
 
-            const {nome} = req?.body;
-            if(nome && nome.length > 2){
+            const { nome } = req?.body;
+            if (nome && nome.length > 2) {
                 usuario.nome = nome;
             }
 
-            const {file} = req;
-            if(file && file.originalname){
+            const { file } = req;
+            if (file && file.originalname) {
                 const image = await uploadImagemCosmic(req);
-                if(image && image.media && image.media.url){
+                if (image && image.media && image.media.url) {
                     usuario.avatar = image.media.url;
-                } 
+                }
             }
 
             await usuariosModel
-                .findByIdAndUpdate({_id : usuario._id}, usuario);
+                .findByIdAndUpdate({ _id: usuario._id }, usuario);
 
-            return res.status(200).json({msg : 'Perfil alterado com sucesso'});
-        }catch(e){
+            return res.status(200).json({ msg: 'Perfil alterado com sucesso' });
+        } catch (e) {
             console.log(e);
-            return res.status(400).json({erro : 'Não foi possível atualizar seu perfil:' + e});
+            return res.status(400).json({ erro: 'Não foi possível atualizar seu perfil:' + e });
         }
     })
-    .get(async (req: NextApiRequest, res: NextApiResponse) => {
-        const usuarios = await usuariosModel.find();
+    .get(async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg | any>) => {
+        try {
+            const { userId } = req.query;
+            const usuario = await usuariosModel.findById(userId);
+            console.log('usuario', usuario);
+            usuario.senha = "";
+            return res.status(200).json(usuario);
+                } catch (e) {
+            console.log(e);
+        }
 
-        return res.status(200).json({ data: usuarios });
-    })
+        return res.status(400).json({ erro: 'Nao foi possivel obter dados do usuario' })
+    });
 
 export const config = {
     api: {
         bodyParser: false
     }
 }
-export default conexaoMongoDB(handler);
+export default validacaoJWT(conexaoMongoDB(handler));

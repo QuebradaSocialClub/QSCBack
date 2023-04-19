@@ -14,6 +14,7 @@ const handler = nc()
 
         try {
             const { userId } = req.query;
+            const { doacaoId } = req.query;
 
             const doacoes = req.body as doacoesRequest;
 
@@ -38,6 +39,7 @@ const handler = nc()
                 })
             }
 
+
             const doacao = {
                 idUsuarioDoador: usuario._id,
                 produto: doacoes.produto,
@@ -49,17 +51,40 @@ const handler = nc()
             await doacoesModel.create(doacao);
             return res.status(200).json({ msg: "Doação cadastrada com sucesso. Agradecemos pela sua atitude solidária!" });
 
-        }   catch (e: any) {
+        } catch (e: any) {
             console.log(e);
             return res.status(400).json({ erro: "Não foi possível disponibilizar sua doação: " + e.toString() });
         }
     })
-    .get(async (req: NextApiRequest, res: NextApiResponse) => {
-        const doacoes = await doacoesModel.find();
-
-        return res.status(200).json({ data: doacoes });
-    })
-
+    .get(async (req: NextApiRequest, res: NextApiResponse) => {    
+        try {
+    
+            const { idDoacao, userId } = req.query;
+    
+            const usuarioEncontrado = await usuariosModel.findById(userId);
+    
+            if (!usuarioEncontrado || usuarioEncontrado.length === 0) {
+                return res.status(404).json({ msg: "Usuário não encontrado" });
+            }
+    
+            const doacaoEncontrada = await doacoesModel.findById(idDoacao);
+    
+            if (!doacaoEncontrada || doacaoEncontrada.length === 0) {
+                return res.status(404).json({ msg: "Doação não encontrada" });
+            }
+    
+            usuarioEncontrado.senha = null;
+    
+            const doacaoResponse = {
+                doacao: doacaoEncontrada
+            }
+    
+            return res.status(200).json({ data: doacaoResponse });
+    
+        } catch (error) {
+            return res.status(500).json({ msg: "Ocorreu um erro ao buscar a doação." });
+        }
+      })
 
 export const config = {
     api: {
