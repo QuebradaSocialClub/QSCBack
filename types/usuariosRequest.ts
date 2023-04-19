@@ -1,6 +1,9 @@
 export type usuariosRequest={
+    nome: string,
     email: string,
     senha: string,
-    nome: string,
-    endereco: string
+    endereco: string,
+    nascimento?: Date,
+    celular?: string,
+    avatar?: string
 }
