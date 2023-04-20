@@ -10,12 +10,6 @@ const handler = nc()
     const doacoes = await doacoesModel.find();
 
     return res.status(200).json({ data: doacoes });
-})
-
-export const config = {
-api: {
-    bodyParser: false
-}
-}
+});
 
 export default validacaoJWT(conexaoMongoDB(handler));

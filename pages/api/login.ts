@@ -31,6 +31,5 @@ const endpointLogin = async (
     }
     return res.status(405).json({ erro: 'Método informado inválido' });
 }
-
 export default conexaoMongoDB(endpointLogin);
 

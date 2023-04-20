@@ -76,20 +76,24 @@ const handler = nc()
             usuarioEncontrado.senha = null;
     
             const doacaoResponse = {
-                doacao: doacaoEncontrada
+                doacao: doacaoEncontrada,
+                nomeQuemDoou: usuarioEncontrado.nome
             }
     
-            return res.status(200).json({ data: doacaoResponse });
+            return res.status(200).json({ data: doacaoResponse});
     
         } catch (error) {
             return res.status(500).json({ msg: "Ocorreu um erro ao buscar a doação." });
         }
       })
 
-export const config = {
+//se não enviamos arquivo de mídia não precisamos passar pelo form-data, por isso comentamos para poder enviar+
+//as informaçoes pelo json no postman. Caso queira passar pelo form-data é só descomentar o trecho abaixo:
+
+/*export const config = {
     api: {
         bodyParser: false
     }
-}
+}*/
 
 export default validacaoJWT(conexaoMongoDB(handler));
