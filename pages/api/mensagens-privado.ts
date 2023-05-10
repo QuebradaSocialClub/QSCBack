@@ -6,6 +6,7 @@ import { validacaoJWT } from '@/middlewares/validacaoJWT';
 import { conexaoMongoDB } from '@/middlewares/conexaoMongoDB';
 import { mensagensPrivadoModel } from '@/models/mensagensPrivadoModel';
 import { mensagensPrivadoRequest } from '@/types/mensagensPrivadoRequest';
+import { politicaCors } from '@/middlewares/politicaCors';
 
 const handler = nc()
     .post(async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg>) => {
@@ -54,4 +55,4 @@ const handler = nc()
         return res.status(400).json({ erro: 'Nao foi possivel localizar essa mensagem' })
     })
 
-export default validacaoJWT(conexaoMongoDB(handler));
+export default politicaCors(validacaoJWT(conexaoMongoDB(handler)));

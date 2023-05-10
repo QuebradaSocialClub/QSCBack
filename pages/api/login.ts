@@ -3,6 +3,7 @@ import { usuariosModel } from "@/models/usuariosModel";
 import { conexaoMongoDB } from "@/middlewares/conexaoMongoDB";
 import md5 from 'md5';
 import jwt from 'jsonwebtoken';
+import { politicaCors } from "@/middlewares/politicaCors";
 
 const endpointLogin = async (
     req: NextApiRequest,
@@ -31,5 +32,5 @@ const endpointLogin = async (
     }
     return res.status(405).json({ erro: 'Método informado inválido' });
 }
-export default conexaoMongoDB(endpointLogin);
+export default politicaCors(conexaoMongoDB(endpointLogin));
 

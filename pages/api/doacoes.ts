@@ -7,6 +7,7 @@ import { validacaoJWT } from '@/middlewares/validacaoJWT';
 import { doacoesModel } from '@/models/doacoesModel';
 import { usuariosModel } from '@/models/usuariosModel';
 import { doacoesRequest } from '@/types/doacoesRequest';
+import { politicaCors } from '@/middlewares/politicaCors';
 
 const handler = nc()
     .use(upload.single('file'))
@@ -96,4 +97,4 @@ const handler = nc()
     }
 }*/
 
-export default validacaoJWT(conexaoMongoDB(handler));
+export default politicaCors(validacaoJWT(conexaoMongoDB(handler)));

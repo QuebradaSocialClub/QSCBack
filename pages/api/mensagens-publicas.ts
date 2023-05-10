@@ -7,6 +7,7 @@ import { conexaoMongoDB } from '@/middlewares/conexaoMongoDB';
 import { mensagensPublicasModel } from '@/models/mensagensPublicasModel';
 import { mensagensPublicasRequest } from '@/types/mensagensPublicasRequest';
 import { upload, uploadImagemCosmic } from "../../services/uploadImagemCosmic";
+import { politicaCors } from '@/middlewares/politicaCors';
 
 const handler = nc()
     .use(upload.single('file'))
@@ -61,4 +62,4 @@ export const config = {
     }
 }
 
-export default validacaoJWT(conexaoMongoDB(handler));
+export default politicaCors(validacaoJWT(conexaoMongoDB(handler)));

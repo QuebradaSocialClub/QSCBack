@@ -8,6 +8,7 @@ import type { RespostaPadraoMsg } from '../../types/RespostaPadraoMsg'
 import { upload, uploadImagemCosmic } from "../../services/uploadImagemCosmic"
 import { Date } from 'mongoose';
 import { validacaoJWT } from '@/middlewares/validacaoJWT';
+import { politicaCors } from '@/middlewares/politicaCors';
 
 const handler = nc()
     .use(upload.single('file'))
@@ -114,4 +115,4 @@ export const config = {
         bodyParser: false
     }
 }
-export default validacaoJWT(conexaoMongoDB(handler));
+export default politicaCors(validacaoJWT(conexaoMongoDB(handler)));

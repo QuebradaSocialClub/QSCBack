@@ -4,6 +4,7 @@ import { usuariosModel } from '@/models/usuariosModel';
 import nc from 'next-connect';
 import type { RespostaPadraoMsg } from '../../types/RespostaPadraoMsg'
 import { validacaoJWT } from '@/middlewares/validacaoJWT';
+import { politicaCors } from '@/middlewares/politicaCors';
 
 const handler = nc()
 .get(async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg | any>) => {
@@ -17,4 +18,4 @@ export const config = {
         bodyParser: false
     }
 }
-export default validacaoJWT(conexaoMongoDB(handler));
+export default politicaCors(validacaoJWT(conexaoMongoDB(handler)));

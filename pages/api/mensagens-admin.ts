@@ -6,6 +6,7 @@ import nc from 'next-connect';
 import { usuariosModel } from '@/models/usuariosModel';
 import { validacaoJWT } from '@/middlewares/validacaoJWT';
 import { conexaoMongoDB } from '@/middlewares/conexaoMongoDB';
+import { politicaCors } from '@/middlewares/politicaCors';
 
 const handler = nc()
 .post(async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg>) =>{
@@ -51,4 +52,4 @@ const handler = nc()
     return res.status(200).json({ data: mensagensRecebidas });
 })
 
-export default validacaoJWT(conexaoMongoDB(handler));
+export default politicaCors(validacaoJWT(conexaoMongoDB(handler)));
